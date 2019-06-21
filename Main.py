@@ -7,36 +7,41 @@ import numpy as np
 
 print("cane: Inserimento")
 
-size = 100
-
+size = 50
 
 tempoTotale = time.time()
 ABRtime = []
 ABRpeggiore = []
 ABR_RNtime = []
 badArrayOfNode = []
-numOfTests = 40000
-for j in range(0, numOfTests, 20000):
+numOfTests = 100
+count=0
+for j in range(0, numOfTests,20):
     print("Parliamo di ", j, "/", numOfTests, "%", j*100/numOfTests)  # , end=' e ci mette ')
-    arrayOfNode = ra.randomArray(size*j)
-    for i in range(0, size*j):
-        badArrayOfNode.append(i)
+    #arrayOfNode = ra.randomArray(size*j)
+    #for i in range(0, size*j):
+     #   badArrayOfNode.append(i)
 
     Tabr = abr.ABR()            # Radice albero br
     Tabr_RN = abrRN.ABR_RN()    # Radice albero RN
 
-    startTime = time.time()
-    for i in range(0, len(arrayOfNode)):
+    for i in range(0, size*j):
+        arrayOfNode = ra.randomArray(size * j)
+        startTime = time.time()
         Tabr.insert(arrayOfNode[i])
         ABRtime.append((time.time() - startTime))
+        count += 1
 
-    startTime = time.time()
-    for i in range(0, len(badArrayOfNode)):
+    for i in range(0, size*j):
+        for k in range(0, size * j):
+            badArrayOfNode.append(k)
+        startTime = time.time()
         Tabr.insert(badArrayOfNode[i])
-        ABRpeggiore.append((time.time() - startTime))
+        ABRpeggiore.append(time.time() - startTime)
 
-    startTime = time.time()
-    for i in range(0, len(arrayOfNode)):
+    for i in range(0, size*j):
+        arrayOfNode = ra.randomArray(size * j)
+        startTime = time.time()
         Tabr_RN.insert(arrayOfNode[i])
         ABR_RNtime.append(time.time() - startTime)
 

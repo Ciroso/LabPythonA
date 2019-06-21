@@ -11,7 +11,7 @@ class ABR_RN:
 
     def insert(self, key):  # O(lg n)
         z = Node(key)
-        y = None
+        y = self.NIL
         x = self.root
         while x is not None and x.leaf is False:
             y = x
@@ -22,7 +22,8 @@ class ABR_RN:
         z.p = y
         if y is None:
             self.root = z
-        elif z.key < y.key:
+            #z.isRoot = True
+        elif y.leaf is False and z.key < y.key:
             y.left = z
         else:
             y.right = z
@@ -32,7 +33,7 @@ class ABR_RN:
         self.fixup(z)
 
     def fixup(self, z):  # O(1) per lg n livelli -> O(lg n)
-        if (z.p is not None) and (z.p.p is not None) and (z.p.p.right is not None) and (z.p.p.left is not None):
+        if (z.p is not None) and (z.p.p is not None):  # and (z.p.p.right is not None) and (z.p.p.left is not None):
             while z.p.color == 1:  # Red
                 if z.p == z.p.p.left:
                     y = z.p.p.right
@@ -44,9 +45,9 @@ class ABR_RN:
                     elif z == z.p.right:
                         z = z.p
                         self.leftRotate(z)
-                    if (z.p is not None) and (z.p.p is not None) and (z.p.p.right is not None) and (                            z.p.p.left is not None):
-                        z.p.color = 0  # Black
-                        z.p.p.color = 1  # Red
+                    #if (z.p is not None) and (z.p.p is not None) and (z.p.p.right is not None) and (z.p.p.left is not None):
+                    z.p.color = 0  # Black
+                    z.p.p.color = 1  # Red
                     self.rightRotate(z)
                 else:
                     y = z.p.p.left
@@ -58,7 +59,7 @@ class ABR_RN:
                     elif z == z.p.left:
                         z = z.p
                         self.rightRotate(z)
-                    if (z.p is not None) and (z.p.p is not None) and (z.p.p.right is not None) and (z.p.p.left is not None):
+                    #if (z.p is not None) and (z.p.p is not None) and (z.p.p.right is not None) and (z.p.p.left is not None):
                         z.p.color = 0  # Black
                         z.p.p.color = 1  # Red
                     self.leftRotate(z)
@@ -109,11 +110,12 @@ class ABR_RN:
     def leftRotate(self, x):
         y = x.right
         x.right = y.left
-        if y.left is not None:
+        if y.left.NIL is False:
             y.left.p = x
         y.p = x.p
-        if x.p is None:
-            self.root = y
+        if x.p.NIL is True:
+            x.left = y
+            #y.isRoot = True
         elif x == x.p.left:
             x.p.left = y
         else:
@@ -124,11 +126,12 @@ class ABR_RN:
     def rightRotate(self, x):
         y = x.left
         x.left = y.right
-        if y.right is not None:
+        if y.right.NIL is False:
             y.right.p = x
         y.p = x.p
-        if x.p is None:
-            self.root = y
+        if x.p.NIL is True:
+            x.left = y                              # FORSE??
+            #y.isRoot = True
         elif x == x.p.left:
             x.p.left = y
         else:
@@ -138,13 +141,14 @@ class ABR_RN:
 
 
 class Node:
-    def __init__(self, key=None, left=None, right=None, p=None, color=0, leaf=False):
+    def __init__(self, key=None, left=None, right=None, p=None, color=0, leaf=False, isRoot = False):
         self.key = key
         self.left = left
         self.right = right
         self.p = p
         self.color = color  # 0 = Black, 1 = Red
         self.leaf = leaf
+        self.isRoot = isRoot
 
 
 if __name__ == "__main__":

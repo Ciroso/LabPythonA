@@ -1,12 +1,14 @@
 class ABR:
     def __init__(self):
+        self.NIL = Node()
+        self.NIL.leaf = True
         self.root = None
 
-    def insert(self, key):  # O(h) con h = lg n  nel caso migliore e  h = n nel caso peggiore
+    def insert(self, key):  # O(lg n)
         z = Node(key)
-        y = None
+        y = self.NIL
         x = self.root
-        while x is not None:
+        while x is not None and x.leaf is False:
             y = x
             if z.key < x.key:
                 x = x.left
@@ -15,10 +17,13 @@ class ABR:
         z.p = y
         if y is None:
             self.root = z
-        elif z.key < y.key:
+            # z.isRoot = True
+        elif y.leaf is False and z.key < y.key:
             y.left = z
         else:
             y.right = z
+        z.left = self.NIL
+        z.right = self.NIL
 
     def searchR(self, key, x):  # O(h)
         if x is None or key == x.key:
@@ -85,9 +90,11 @@ class ABR:
 
 
 class Node:
-    def __init__(self, key=None, left=None, right=None, p=None):
+    def __init__(self, key=None, left=None, right=None, p=None, color=0, leaf=False, isRoot = False):
         self.key = key
         self.left = left
         self.right = right
         self.p = p
-
+        self.color = color  # 0 = Black, 1 = Red
+        self.leaf = leaf
+        self.isRoot = isRoot
