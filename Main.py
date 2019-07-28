@@ -7,31 +7,42 @@ import numpy as np
 
 print("cane: Inserimento")
 
-size = 50
+size = 5
 
 tempoTotale = time.time()
 ABRtime = []
 ABRpeggiore = []
 ABR_RNtime = []
 badArrayOfNode = []
-numOfTests = 100
-count=0
-for j in range(0, numOfTests,20):
+
+numOfTests = 10000
+count = 0
+tempTimeAbr = []
+for j in range(10, numOfTests, 100):
     print("Parliamo di ", j, "/", numOfTests, "%", j*100/numOfTests)  # , end=' e ci mette ')
-    #arrayOfNode = ra.randomArray(size*j)
-    #for i in range(0, size*j):
-     #   badArrayOfNode.append(i)
+    # arrayOfNode = ra.randomArray(size*j)
+    # for i in range(0, size*j):
+    #   badArrayOfNode.append(i)
 
-    Tabr = abr.ABR()            # Radice albero br
-    Tabr_RN = abrRN.ABR_RN()    # Radice albero RN
+    Tabr = abr.ABR()            # Albero br
+    Tabr_RN = abrRN.ABR_RN()    # Albero RN
+    if (count % 10 == 0 and j != 10):
+        temp = 0
+        for i in range(0, count):
+            temp += tempTimeAbr[i]
+        ABRtime.append(temp/count)
+        count = 0
+        tempTimeAbr = []
 
+    # for i in range(0, size*j):
+    arrayOfNode = ra.randomArray(size * j)
+    startTime = time.time()
     for i in range(0, size*j):
-        arrayOfNode = ra.randomArray(size * j)
-        startTime = time.time()
         Tabr.insert(arrayOfNode[i])
-        ABRtime.append((time.time() - startTime))
-        count += 1
-
+    # ABRtime.append((time.time() - startTime))
+    tempTimeAbr.append((time.time() - startTime))
+    count += 1
+'''
     for i in range(0, size*j):
         for k in range(0, size * j):
             badArrayOfNode.append(k)
@@ -44,14 +55,14 @@ for j in range(0, numOfTests,20):
         startTime = time.time()
         Tabr_RN.insert(arrayOfNode[i])
         ABR_RNtime.append(time.time() - startTime)
-
+'''
 
 t = np.arange(0, len(ABRtime))
 print(100, "%!!!!!!!")
 
+#plt.plot(t, ABRpeggiore, label="ABR worst")
+#plt.plot(t, ABR_RNtime, label="ABR_RN")
 plt.plot(t, ABRtime, label="ABR")
-plt.plot(t, ABR_RNtime, label="ABR_RN")
-plt.plot(t, ABRpeggiore, linestyle='', marker='*', label="ABR worst")
 plt.legend()
 plt.xlabel('Numero Nodi')
 plt.ylabel('Tempo (sec)')
