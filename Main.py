@@ -2,7 +2,6 @@ import ABR as abr
 import ABR_RN as abrRN
 import RandomArray as ra
 import matplotlib.pyplot as plt
-import time
 import random
 import sys
 from timeit import default_timer as timer
@@ -133,4 +132,4 @@ plt.draw()
 plt.savefig('Tempo di ricerca Alberi', dpi=100)
 plt.show()
 
-print("Ci abbiamo impiegato ", time.time() - tempoTotale)
+print("Ci abbiamo impiegato ", timer() - tempoTotale)
