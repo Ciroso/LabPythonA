@@ -133,6 +133,13 @@ class ABR_RN:
         y.right = x
         x.p = y
 
+    def heightRecursive(self, node):
+        def recursiveHeight(v):
+            if v == self.NIL:
+                return 0
+            else:
+                return max(recursiveHeight(v.left), recursiveHeight(v.right)) + 1
+        return recursiveHeight(node) - 1
 
 class Node:
     def __init__(self, key):

@@ -89,6 +89,13 @@ class ABR:
             y = y.p
         return y
 
+    def heightRecursive(self, node):
+        def recursiveHeight(v):
+            if v == self.NIL:
+                return 0
+            else:
+                return max(recursiveHeight(v.left), recursiveHeight(v.right)) + 1
+        return recursiveHeight(node) - 1
 
 class Node:
     def __init__(self, key):
@@ -96,3 +103,11 @@ class Node:
         self.p = None
         self.left = None
         self.right = None
+
+if __name__ == "__main__":
+    T = ABR()
+    # collectionOfNode = ra.randomArray(100)
+    for i in range(0, 10):
+        #print("nodo", i)
+        T.insert(i + 1)
+    print(T.heightRecursive(T.root))
