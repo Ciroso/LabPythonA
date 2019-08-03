@@ -61,21 +61,16 @@ class ABR_RN:
                     self.leftRotate(z.p.p)
         self.root.color = 0  # Black
 
-    def searchR(self, key, x):  # O(lg n)
-        if x is None or key == x.key:
-            return x
-        if key < x.key:
-            return self.searchR(key, x.left)
-        else:
-            return self.searchR(key, x.right)
-
-    def searchI(self, key, x):  # O(lg n)
-        while x is not None and key != x.key:
+    def searchI(self, key):  # O(lg n)
+        x = self.root
+        while x != self.NIL and key != x.key:
             if key < x.key:
                 x = x.left
             else:
                 x = x.right
-        return x
+        if x == self.NIL:
+            return False
+        return True
 
     def inorder_tree_walk(self, x):  # O(n)
         if x != self.NIL:

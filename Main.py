@@ -3,13 +3,14 @@ import ABR_RN as abrRN
 import RandomArray as ra
 import matplotlib.pyplot as plt
 import time
-import numpy as np
+import random
 import sys
+from timeit import default_timer as timer
 
 sys.setrecursionlimit(1000000)
 
 print("Inserimento")
-tempoTotale = time.time()
+tempoTotale = timer()
 ABRtime = []
 ABRWorst = []
 ABR_RNtime = []
@@ -24,32 +25,34 @@ heightABRWorst = []
 heightABR_RN = []
 numberOfNodes = []
 
-numOfTests = 5000#10000
+timeToSearchABR = []
+timeToSearchABR_RN = []
+numOfTests = 10000
 for j in range(0, numOfTests, 50):
-    print("Parliamo di ", j, "/", numOfTests, "%", j * 100 / numOfTests)  # , end=' e ci mette ')
+    print("Parliamo di ", j, "/", numOfTests, " elementi, ovvero ", j * 100 / numOfTests, "%")
 
     Tabr = abr.ABR()  # Albero br
     Tabrw = abr.ABR()
     Tabr_RN = abrRN.ABR_RN()  # Albero RN
     arrayOfNode = ra.randomArray(j)
 
-    startTime = time.time()
+    startTime = timer()
     for i in range(0, j):
         Tabr.insert(arrayOfNode[i])
-    tempTimeAbr.append((time.time() - startTime))
+    tempTimeAbr.append((timer() - startTime))
 
     badArrayOfNode = []
     for i in range(0, j):
         badArrayOfNode.append(i + 1)
-    startTime = time.time()
+    startTime = timer()
     for i in range(0, j):
         Tabrw.insert(badArrayOfNode[i])
-    tempTimeAbrWorst.append(time.time() - startTime)
+    tempTimeAbrWorst.append(timer() - startTime)
 
-    startTime = time.time()
+    startTime = timer()
     for i in range(0, j):
         Tabr_RN.insert(arrayOfNode[i])
-    tempTimeabr_RN.append(time.time() - startTime)
+    tempTimeabr_RN.append(timer() - startTime)
 
     count += 1
     if count % 10 == 0 or j == numOfTests or j == 0:
@@ -70,7 +73,16 @@ for j in range(0, numOfTests, 50):
         numberOfNodes.append(j)
         heightABR.append(Tabr.heightRecursive(Tabr.root))
         heightABR_RN.append(Tabr_RN.heightRecursive(Tabr_RN.root))
-        print("Temp variables refreshed")
+
+        keyToSearch = random.randint(0, j*2)
+        startTime = timer()
+        Tabr.searchI(keyToSearch)
+        timeToSearchABR.append(timer() - startTime)
+        startTime = timer()
+        Tabr_RN.searchI(keyToSearch)
+        timeToSearchABR_RN.append(timer() - startTime)
+        print("##########Temp variables refreshed & co.##########")
+
 print(100, "%!!!!!!!")
 
 
@@ -107,6 +119,18 @@ plt.ylabel('Altezza')
 plt.grid()
 plt.draw()
 plt.savefig('Altezza Alberi', dpi=100)
+plt.show()
+
+
+# Ricerca
+plt.plot(numberOfNodes, timeToSearchABR_RN, label="ABR_RN")
+plt.plot(numberOfNodes, timeToSearchABR, label="ABR")
+plt.legend()
+plt.xlabel('Numero nodi')
+plt.ylabel('Tempo di ricerca')
+plt.grid()
+plt.draw()
+plt.savefig('Tempo di ricerca Alberi', dpi=100)
 plt.show()
 
 print("Ci abbiamo impiegato ", time.time() - tempoTotale)

@@ -26,21 +26,16 @@ class ABR:
         z.left = self.NIL
         z.right = self.NIL
 
-    def searchR(self, key, x):  # O(h)
-        if x is None or key == x.key:
-            return x
-        if key < x.key:
-            return self.searchR(key, x.left)
-        else:
-            return self.searchR(key, x.right)
-
-    def searchI(self, key, x):  # O(h) (più veloce del ricorsivo)
-        while x is not None and key != x.key:
+    def searchI(self, key):  # O(h)
+        x = self.root
+        while x != self.NIL and key != x.key:
             if key < x.key:
                 x = x.left
             else:
                 x = x.right
-        return x
+        if x == self.NIL:
+            return False
+        return True
 
     def inorder_tree_walk(self, x):  # O(n)
         if x is not None:
@@ -104,10 +99,11 @@ class Node:
         self.left = None
         self.right = None
 
+
 if __name__ == "__main__":
     T = ABR()
     # collectionOfNode = ra.randomArray(100)
     for i in range(0, 10):
         #print("nodo", i)
         T.insert(i + 1)
-    print(T.heightRecursive(T.root))
+    print(T.searchI(8))
