@@ -5,71 +5,88 @@ import matplotlib.pyplot as plt
 import time
 import numpy as np
 
-print("cane: Inserimento")
-
-size = 5
+print("Inserimento")
 
 tempoTotale = time.time()
 ABRtime = []
-ABRpeggiore = []
+ABRWorst = []
 ABR_RNtime = []
 badArrayOfNode = []
 
-numOfTests = 10000
 count = 0
 tempTimeAbr = []
-for j in range(10, numOfTests, 100):
-    print("Parliamo di ", j, "/", numOfTests, "%", j*100/numOfTests)  # , end=' e ci mette ')
-    # arrayOfNode = ra.randomArray(size*j)
-    # for i in range(0, size*j):
-    #   badArrayOfNode.append(i)
+tempTimeAbrWorst = []
+tempTimeabr_RN = []
 
-    Tabr = abr.ABR()            # Albero br
-    Tabr_RN = abrRN.ABR_RN()    # Albero RN
-    if (count % 10 == 0 and j != 10):
-        temp = 0
+numOfTests = 10000
+for j in range(0, numOfTests, 100):
+    print("Parliamo di ", j, "/", numOfTests, "%", j * 100 / numOfTests)  # , end=' e ci mette ')
+
+    Tabr = abr.ABR()  # Albero br
+    Tabrw = abr.ABR()
+    Tabr_RN = abrRN.ABR_RN()  # Albero RN
+    arrayOfNode = ra.randomArray(j)
+
+    startTime = time.time()
+    for i in range(0, j):
+        Tabr.insert(arrayOfNode[i])
+    tempTimeAbr.append((time.time() - startTime))
+
+    badArrayOfNode = []
+    for i in range(0, j):
+        badArrayOfNode.append(i + 1)
+    startTime = time.time()
+    for i in range(0, j):
+        Tabrw.insert(badArrayOfNode[i])
+    tempTimeAbrWorst.append(time.time() - startTime)
+
+    startTime = time.time()
+    for i in range(0, j):
+        Tabr_RN.insert(arrayOfNode[i])
+    tempTimeabr_RN.append(time.time() - startTime)
+
+    count += 1
+    if count % 10 == 0 or j == numOfTests:
+        tempABR = 0
+        tempABRW = 0
+        tempABR_RN = 0
         for i in range(0, count):
-            temp += tempTimeAbr[i]
-        ABRtime.append(temp/count)
+            tempABR += tempTimeAbr[i]
+            tempABRW += tempTimeAbrWorst[i]
+            tempABR_RN += tempTimeabr_RN[i]
+        ABRtime.append(tempABR / count)
+        ABRWorst.append(tempABRW / count)
+        ABR_RNtime.append(tempABR_RN / count)
         count = 0
         tempTimeAbr = []
-
-    # for i in range(0, size*j):
-    arrayOfNode = ra.randomArray(size * j)
-    startTime = time.time()
-    for i in range(0, size*j):
-        Tabr.insert(arrayOfNode[i])
-    # ABRtime.append((time.time() - startTime))
-    tempTimeAbr.append((time.time() - startTime))
-    count += 1
-'''
-    for i in range(0, size*j):
-        for k in range(0, size * j):
-            badArrayOfNode.append(k)
-        startTime = time.time()
-        Tabr.insert(badArrayOfNode[i])
-        ABRpeggiore.append(time.time() - startTime)
-
-    for i in range(0, size*j):
-        arrayOfNode = ra.randomArray(size * j)
-        startTime = time.time()
-        Tabr_RN.insert(arrayOfNode[i])
-        ABR_RNtime.append(time.time() - startTime)
-'''
+        tempTimeAbrWorst = []
+        tempTimeabr_RN = []
+        print("Temp variables refreshed")
 
 t = np.arange(0, len(ABRtime))
 print(100, "%!!!!!!!")
 
-#plt.plot(t, ABRpeggiore, label="ABR worst")
-#plt.plot(t, ABR_RNtime, label="ABR_RN")
+# Inserimento: Plot con tutti e tre
+plt.plot(t, ABR_RNtime, label="ABR_RN")
+plt.plot(t, ABRWorst, label="ABR worst")
 plt.plot(t, ABRtime, label="ABR")
 plt.legend()
 plt.xlabel('Numero Nodi')
 plt.ylabel('Tempo (sec)')
 plt.grid()
 plt.draw()
-plt.savefig('grafico.png', dpi=100)
+plt.savefig('abrC_W_RN.png', dpi=100)
 plt.show()
-print("Ci abbiamo impiegato ", time.time() - tempoTotale)
 
-#T.inorder_tree_walk(T.root)
+# Inserimento: Plot zoom su Abr e Abr_RN
+plt.plot(t, ABR_RNtime, label="ABR_RN")
+plt.plot(t, ABRtime, label="ABR")
+plt.legend()
+plt.xlabel('Numero Nodi (x1000)')
+plt.ylabel('Tempo (sec)')
+plt.grid()
+plt.draw()
+plt.savefig('abrC_RN.png', dpi=100)
+plt.show()
+
+print("Ci abbiamo impiegato ", time.time() - tempoTotale)
