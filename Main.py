@@ -56,8 +56,6 @@ for j in range(0, numOfTests, 100):
             Tabr_RN.insert(arrayOfNode[i])
             tempTimeabr_RN.append(timer() - startTime)
 
-    # count += 1
-    # if count % 10 == 0 or j == numOfTests or j == 0:
     if len(tempTimeAbr) == 0:
         ABRtime.append(0)
         ABRWorst.append(0)
