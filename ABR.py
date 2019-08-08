@@ -1,7 +1,3 @@
-from timeit import default_timer as timer
-import RandomArray as ra
-import matplotlib.pyplot as plt
-
 class ABR:
     def __init__(self):
         self.NIL = Node(None)
@@ -103,44 +99,3 @@ class Node:
         self.p = None
         self.left = None
         self.right = None
-
-
-if __name__ == "__main__":
-    Tabr = ABR()  # Albero br
-    numberOfNodes = []
-    ABRtime = []
-    count = 0
-    numOfTests = 10000
-    tempTimeAbr = []
-    for j in range(1, numOfTests, 50):
-        print("Parliamo di ", j, "/", numOfTests, " elementi, ovvero ", j * 100 / numOfTests, "%")
-        Tabr = ABR()  # Albero br
-        arrayOfValue = ra.randomArray(j)
-        arrayOfNode = []
-
-        for w in range(0, j):
-            arrayOfNode.append(Node(arrayOfValue[w]))
-        # startTime = timer()
-
-        for b in range(0, 100):
-            for i in arrayOfNode:
-                startTime = timer()
-                Tabr.insert(i)
-                end = timer()
-                tempTimeAbr.append(end - startTime)
-            tempABR = 0
-            for i in range(0, len(tempTimeAbr)):
-                tempABR += tempTimeAbr[i]
-            ABRtime.append(tempABR / len(tempTimeAbr))
-            tempTimeAbr = []
-            numberOfNodes.append(j)
-            #count += 1
-        #if count % 10 == 0 or j == numOfTests or j > 0:
-
-    plt.plot(numberOfNodes, ABRtime, label="ABR")
-    plt.legend()
-    plt.xlabel('Numero Nodi')
-    plt.ylabel('Tempo (sec)')
-    plt.grid()
-    plt.draw()
-    plt.show()

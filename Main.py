@@ -82,7 +82,7 @@ for j in range(0, numOfTests, 100):
     heightABR.append(Tabr.heightRecursive(Tabr.root))
     heightABR_RN.append(Tabr_RN.heightRecursive(Tabr_RN.root))
 
-    keyToSearch = random.randint(0, j * 2)
+    keyToSearch = random.randint(0, j + j/4)
     startTime = timer()
     Tabr.searchI(keyToSearch)
     timeToSearchABR.append(timer() - startTime)
