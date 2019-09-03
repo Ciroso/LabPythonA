@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import random
 import sys
 from timeit import default_timer as timer
+import time
 
 sys.setrecursionlimit(1000000)
 
@@ -45,25 +46,24 @@ for j in range(0, numOfTests, 100):
 
     for w in range(0, numOfRep):
         for i in range(0, j):
-            startTime = timer()
+            startTime = time.time()
             Tabr.insert(arrayOfNode[i])
-            tempTimeAbr.append((timer() - startTime))
+            tempTimeAbr.append((time.time() - startTime))
 
         for i in range(0, j):
-            startTime = timer()
+            startTime = time.time()
             Tabrw.insert(badArrayOfNode[i])
-            tempTimeAbrWorst.append(timer() - startTime)
+            tempTimeAbrWorst.append(time.time() - startTime)
 
         for i in range(0, j):
-            startTime = timer()
+            startTime = time.time()
             Tabr_RN.insert(arrayOfNode[i])
-            tempTimeabr_RN.append(timer() - startTime)
+            tempTimeabr_RN.append(time.time() - startTime)
 
         for i in range(0, j):
-            startTime = timer()
+            startTime = time.time()
             Tabr_RNw.insert(badArrayOfNode[i])
-            tempTimeabr_RNw.append(timer() - startTime)
-
+            tempTimeabr_RNw.append(time.time() - startTime)
 
     if len(tempTimeAbr) == 0:
         ABRtime.append(0)
@@ -91,8 +91,6 @@ for j in range(0, numOfTests, 100):
         tempTimeAbrWorst = []
         tempTimeabr_RN = []
         tempTimeabr_RNw = []
-    #heightABR.append(Tabr.height(Tabr.root))
-    #heightABR_RN.append(Tabr_RN.height(Tabr_RN.root))
 
     keyToSearch = random.randint(0, j + j/4)
     startTime = timer()
