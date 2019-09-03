@@ -1,5 +1,7 @@
 class ABR:
+
     def __init__(self):
+        self.plo = 0
         self.NIL = Node(None)
         self.NIL.p = self.NIL
         self.NIL.left = self.NIL
@@ -7,6 +9,7 @@ class ABR:
         self.root = self.NIL
 
     def insert(self, key):  # O(lg n)
+        self.plo += 1
         z = Node(key)
         y = self.NIL
         x = self.root
@@ -83,14 +86,6 @@ class ABR:
             x = y
             y = y.p
         return y
-
-    def heightRecursive(self, node):
-        def recursiveHeight(v):
-            if v == self.NIL:
-                return 0
-            else:
-                return max(recursiveHeight(v.left), recursiveHeight(v.right)) + 1
-        return recursiveHeight(node) - 1
 
 
 class Node:
