@@ -29,8 +29,8 @@ numberOfNodes = []
 
 timeToSearchABR = []
 timeToSearchABR_RN = []
-numOfTests = 1000
-numOfRep = 100
+numOfTests = 5000
+numOfRep = 10
 for j in range(0, numOfTests, 100):
     print("Parliamo di ", j, "/", numOfTests, " elementi, ovvero ", j * 100 / numOfTests, "%")
 
@@ -91,7 +91,8 @@ for j in range(0, numOfTests, 100):
         tempTimeAbrWorst = []
         tempTimeabr_RN = []
         tempTimeabr_RNw = []
-
+    heightABR_RN.append(Tabr_RN.heightRecursive(Tabr_RN.root))
+    heightABR.append(Tabr.heightRecursive(Tabr.root))
     keyToSearch = random.randint(0, j + j/4)
     startTime = timer()
     Tabr.searchI(keyToSearch)
@@ -138,6 +139,18 @@ plt.grid()
 plt.draw()
 plt.title("Ricerca")
 plt.savefig('Tempo_di_ricerca', dpi=100)
+plt.show()
+
+# Altezza
+plt.plot(numberOfNodes, heightABR_RN, label="Altezza Albero Rosso-Nero")
+plt.plot(numberOfNodes, heightABR, label="Altezza Albero Binario")
+plt.legend()
+plt.xlabel('Altezza')
+plt.ylabel('Nodi')
+plt.grid()
+plt.draw()
+plt.title("Altezza")
+plt.savefig('Altezza', dpi=100)
 plt.show()
 
 print("Ci abbiamo impiegato ", timer() - tempoTotale)
