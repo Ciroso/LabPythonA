@@ -70,7 +70,8 @@ class ABR_RN:
                 x = x.right
         if x == self.NIL:
             return False
-        return True
+        else:
+            return True
 
     def inorder_tree_walk(self, x):  # O(n)
         if x != self.NIL:

@@ -1,3 +1,4 @@
+import math
 import ABR as abr
 import ABR_RN as abrRN
 import RandomArray as ra
@@ -20,31 +21,37 @@ tempTimeAbr = []
 tempTimeAbrWorst = []
 tempTimeabr_RN = []
 tempTimeabr_RNw = []
-effective = []
+
+tempHeightABR = []
+tempHeightABR_RN = []
 
 heightABR = []
 heightABRWorst = []
 heightABR_RN = []
 numberOfNodes = []
 
+tempTimeToSearchABR = []
+tempTimeToSearchABR_RN = []
+
 timeToSearchABR = []
 timeToSearchABR_RN = []
-numOfTests = 5000
+
+numOfTests = 10000
 numOfRep = 10
-for j in range(0, numOfTests, 100):
-    print("Parliamo di ", j, "/", numOfTests, " elementi, ovvero ", j * 100 / numOfTests, "%")
+for j in range(0, numOfTests + 1, 2500):
+    print("Parliamo di ", j, "/", numOfTests, " elementi, cioè ", j * 100 / numOfTests, "%")
 
     Tabr = abr.ABR()  # Albero BR
     Tabrw = abr.ABR()
     Tabr_RN = abrRN.ABR_RN()  # Albero RN
     Tabr_RNw = abrRN.ABR_RN()
 
-    arrayOfNode = ra.randomArray(j)
-    badArrayOfNode = []
-    for i in range(0, j):
-        badArrayOfNode.append(i)
-
     for w in range(0, numOfRep):
+        arrayOfNode = ra.randomArray(j)
+        badArrayOfNode = []
+        for i in range(0, j):
+            badArrayOfNode.append(i)
+
         for i in range(0, j):
             startTime = time.time()
             Tabr.insert(arrayOfNode[i])
@@ -65,43 +72,67 @@ for j in range(0, numOfTests, 100):
             Tabr_RNw.insert(badArrayOfNode[i])
             tempTimeabr_RNw.append(time.time() - startTime)
 
+            # Ricerca ABR
+            keyToSearch = random.randint(0, math.ceil(j + j / 4))
+            startTime = time.time()
+            Tabr.searchI(keyToSearch)
+            tempTimeToSearchABR.append(time.time() - startTime)
+
+            # Ricerca ABR_RN
+            startTime = time.time()
+            Tabr_RN.searchI(keyToSearch)
+            tempTimeToSearchABR_RN.append(time.time() - startTime)
+
+            # Altezza
+            tempHeightABR.append(Tabr.heightRecursive(Tabr.root))
+            tempHeightABR_RN.append(Tabr_RN.heightRecursive(Tabr_RN.root))
+
     if len(tempTimeAbr) == 0:
         ABRtime.append(0)
         ABRWorst.append(0)
         ABR_RNtime.append(0)
         ABR_RNwtime.append(0)
-        numberOfNodes.append(0)
+        timeToSearchABR.append(0)
+        timeToSearchABR_RN.append(0)
+        heightABR.append(0)
+        heightABR_RN.append(0)
     else:
         tempABR = 0
         tempABRW = 0
         tempABR_RN = 0
         tempABR_RNw = 0
+        tempSearchAbr = 0
+        tempSearchAbr_rn = 0
+        tempHABR = 0
+        tempHABR_RN = 0
         for i in range(0, len(tempTimeAbr)):
             tempABR += tempTimeAbr[i]
             tempABRW += tempTimeAbrWorst[i]
             tempABR_RN += tempTimeabr_RN[i]
             tempABR_RNw += tempTimeabr_RNw[i]
+            tempSearchAbr += tempTimeToSearchABR[i]
+            tempSearchAbr_rn += tempTimeToSearchABR_RN[i]
+            tempHABR += tempHeightABR[i]
+            tempHABR_RN += tempHeightABR_RN[i]
         ABRtime.append(tempABR / len(tempTimeAbr))
-        ABRWorst.append(tempABRW / len(tempTimeAbr))
-        ABR_RNtime.append(tempABR_RN / len(tempTimeAbr))
-        ABR_RNwtime.append(tempABR_RNw / len(tempTimeAbr))
-        count = 0
-        numberOfNodes.append(len(tempTimeAbr))
+        ABRWorst.append(tempABRW / len(tempTimeAbrWorst))
+        ABR_RNtime.append(tempABR_RN / len(tempTimeabr_RN))
+        ABR_RNwtime.append(tempABR_RNw / len(tempTimeabr_RNw))
+        timeToSearchABR.append(tempSearchAbr / len(tempTimeToSearchABR))
+        timeToSearchABR_RN.append(tempSearchAbr_rn / len(tempTimeToSearchABR_RN))
+        heightABR.append(tempHABR / len(tempHeightABR))
+        heightABR_RN.append(tempHABR_RN / len(tempHeightABR_RN))
+
         tempTimeAbr = []
         tempTimeAbrWorst = []
         tempTimeabr_RN = []
         tempTimeabr_RNw = []
-    heightABR_RN.append(Tabr_RN.heightRecursive(Tabr_RN.root))
-    heightABR.append(Tabr.heightRecursive(Tabr.root))
-    keyToSearch = random.randint(0, j + j/4)
-    startTime = timer()
-    Tabr.searchI(keyToSearch)
-    timeToSearchABR.append(timer() - startTime)
+        tempSearchAbr = []
+        tempSearchAbr_rn = []
+        tempHeightABR = []
+        tempHeightABR_RN = []
 
-    startTime = timer()
-    Tabr_RN.searchI(keyToSearch)
-    timeToSearchABR_RN.append(timer() - startTime)
-    effective.append(j)
+    numberOfNodes.append(j)
 
 print(100, "%!!!!!!!")
 
@@ -152,5 +183,3 @@ plt.draw()
 plt.title("Altezza")
 plt.savefig('Altezza', dpi=100)
 plt.show()
-
-print("Ci abbiamo impiegato ", timer() - tempoTotale)
