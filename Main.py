@@ -37,7 +37,7 @@ timeToSearchABR = []
 timeToSearchABR_RN = []
 
 numOfTests = 5000
-numOfRep = 5
+numOfRep = 10
 for j in range(0, numOfTests + 1, 1000):
     print("Parliamo di ", j, "/", numOfTests, " elementi, cioè ", j * 100 / numOfTests, "%")
 
